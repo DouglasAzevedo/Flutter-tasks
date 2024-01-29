@@ -1,4 +1,5 @@
 import 'package:first_app/components/task.dart';
+import 'package:first_app/screens/form_screen.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -32,7 +33,14 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FormScreen(),
+            ),
+          );
+        },
         backgroundColor: Colors.blue,
         child: const Icon(
           Icons.add,
