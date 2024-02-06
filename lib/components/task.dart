@@ -6,21 +6,21 @@ import 'package:flutter/material.dart';
 class Task extends StatefulWidget {
   final String description;
   final String urlImage;
-  final int dificuldade;
+  final int difficulty;
 
-  const Task(
+  Task(
       {super.key,
       required this.description,
       required this.urlImage,
-      required this.dificuldade});
+      required this.difficulty});
+
+  int nivel = 0;
 
   @override
   State<Task> createState() => _TaskState();
 }
 
 class _TaskState extends State<Task> {
-  int nivel = 0;
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -71,13 +71,13 @@ class _TaskState extends State<Task> {
                                   overflow: TextOverflow.ellipsis),
                             ),
                           ),
-                          Difficulty(dificuldade: widget.dificuldade)
+                          Difficulty(dificuldade: widget.difficulty)
                         ],
                       ),
                       ElevatedButton(
                         onPressed: () {
                           setState(() {
-                            nivel++;
+                            widget.nivel++;
                           });
                         },
                         style: ElevatedButton.styleFrom(
@@ -98,8 +98,8 @@ class _TaskState extends State<Task> {
                         width: 200,
                         child: LinearProgressIndicator(
                           color: Colors.black,
-                          value: (widget.dificuldade > 0)
-                              ? (nivel / widget.dificuldade) / 10
+                          value: (widget.difficulty > 0)
+                              ? (widget.nivel / widget.difficulty) / 10
                               : 1,
                         ),
                       ),
@@ -107,7 +107,7 @@ class _TaskState extends State<Task> {
                     Padding(
                       padding: const EdgeInsets.all(12.0),
                       child: Text(
-                        "Nível $nivel",
+                        "Nível ${widget.nivel}",
                         style: TextStyle(color: Colors.white, fontSize: 16),
                       ),
                     )

@@ -1,4 +1,4 @@
-import 'package:first_app/components/task.dart';
+import 'package:first_app/data/task_inherited.dart';
 import 'package:first_app/screens/form_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -17,28 +17,15 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: Colors.blue,
       ),
       body: ListView(
-        children: const [
-          Task(
-            description: "Aprender Flutter",
-            urlImage:
-                "https://pbs.twimg.com/media/Eu7m692XIAEvxxP?format=png&name=large",
-            dificuldade: 4,
-          ),
-          Task(
-            description: "Refatorar código do aplicativo",
-            urlImage:
-                "https://pbs.twimg.com/media/Eu7m692XIAEvxxP?format=png&name=large",
-            dificuldade: 2,
-          ),
-        ],
+        padding: const EdgeInsets.only(top: 8, bottom: 70),
+        children: TaskInherited.of(context)!.taskList,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => FormScreen(),
-            ),
+                builder: (newContext) => FormScreen(taskContext: context)),
           );
         },
         backgroundColor: Colors.blue,
