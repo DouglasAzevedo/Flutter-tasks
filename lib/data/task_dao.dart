@@ -7,11 +7,13 @@ class TaskDao {
   static const String _name = 'name';
   static const String _difficulty = 'difficulty';
   static const String _image = 'image';
+  static const String _nivel = 'nivel';
 
   static const String tableSql = 'CREATE TABLE $_tableName('
       '$_name TEXT, '
       '$_difficulty INTEGER, '
-      '$_image TEXT)';
+      '$_image TEXT,'
+      '$_nivel INTEGER)';
 
   save(Task task) async {
     final Database database = await getDatabase();
@@ -24,10 +26,10 @@ class TaskDao {
     }
   }
 
-  delete(Task task) async {
+  delete(String taskName) async {
     final Database database = await getDatabase();
     return await database
-        .delete(_tableName, where: '$_name = ?', whereArgs: [task.description]);
+        .delete(_tableName, where: '$_name = ?', whereArgs: [taskName]);
   }
 
   Future<List<Task>> findAll() async {
@@ -50,9 +52,11 @@ class TaskDao {
 
     for (Map<String, dynamic> row in taskList) {
       final Task task = Task(
-          description: row[_name],
-          urlImage: row[_image],
-          difficulty: row[_difficulty]);
+        description: row[_name],
+        urlImage: row[_image],
+        difficulty: row[_difficulty],
+        nivel: row[_nivel],
+      );
       tasks.add(task);
     }
 
@@ -64,6 +68,7 @@ class TaskDao {
     map[_name] = task.description;
     map[_difficulty] = task.difficulty;
     map[_image] = task.urlImage;
+    map[_nivel] = task.nivel;
 
     return map;
   }

@@ -1,18 +1,30 @@
-// ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers, prefer_const_literals_to_create_immutables
-
 import 'package:first_app/components/difficulty.dart';
+import 'package:first_app/data/task_dao.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class Task extends StatefulWidget {
   final String description;
   final String urlImage;
   final int difficulty;
 
+  Function(BuildContext)? deleteFunction;
+
   Task(
       {super.key,
       required this.description,
       required this.urlImage,
-      required this.difficulty});
+      required this.difficulty,
+      required this.nivel,
+      this.deleteFunction});
+
+  Task getTask() {
+    return Task(
+        description: description,
+        urlImage: urlImage,
+        difficulty: difficulty,
+        nivel: nivel);
+  }
 
   int nivel = 0;
 
@@ -25,7 +37,18 @@ class _TaskState extends State<Task> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
+      child: Slidable(
+        endActionPane: ActionPane(
+          motion: const StretchMotion(),
+          children: [
+            SlidableAction(
+              onPressed: widget.deleteFunction,
+              icon: Icons.delete,
+              backgroundColor: Colors.red.shade300,
+              borderRadius: BorderRadius.circular(12),
+            )
+          ],
+        ),
         child: Stack(
           children: [
             Container(
@@ -65,7 +88,7 @@ class _TaskState extends State<Task> {
                             width: 200,
                             child: Text(
                               widget.description,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
                                   overflow: TextOverflow.ellipsis),
@@ -78,13 +101,15 @@ class _TaskState extends State<Task> {
                         onPressed: () {
                           setState(() {
                             widget.nivel++;
+                            TaskDao().save(widget.getTask());
                           });
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue.shade500,
-                          padding: EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(8),
                         ),
-                        child: Icon(Icons.arrow_drop_up, color: Colors.white),
+                        child: const Icon(Icons.arrow_drop_up,
+                            color: Colors.white),
                       )
                     ],
                   ),
@@ -108,7 +133,8 @@ class _TaskState extends State<Task> {
                       padding: const EdgeInsets.all(12.0),
                       child: Text(
                         "Nível ${widget.nivel}",
-                        style: TextStyle(color: Colors.white, fontSize: 16),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 16),
                       ),
                     )
                   ],
